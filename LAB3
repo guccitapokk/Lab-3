@@ -1,0 +1,66 @@
+#1 variant
+from tkinter import *
+import random
+import string
+from PIL import Image,ImageTk
+import pygame
+
+def generate_block():
+    # Генерируем 2 случайные цифры
+    digits = ''.join(random.choices(string.digits, k=2))
+    # Генерируем 3 случайные буквы (заглавные)
+    letters = ''.join(random.choices(string.ascii_uppercase, k=3))
+    # Объединяем буквы и цифры и перемешиваем
+    block = list(digits + letters)
+    random.shuffle(block)
+    return ''.join(block)
+
+def generate_code():
+    return f"{generate_block()}-{generate_block()}-{generate_block()}"
+# Генерация и вывод кода
+code = generate_code()
+
+def clicked():
+    lbl.configure(text= code)
+
+def play_music():
+    pygame.mixer.music.load("music.mp3")
+    pygame.mixer.music.play(-1)  # Запускаем музыку
+
+# Инициализация pygame
+pygame.mixer.init()
+
+
+window = Tk()
+window.title("генерация кода")
+window.geometry('260x260')
+lbl = Label(window, text="Сгенерируйте код:", font=("Arial Bold", 10))
+lbl.grid(column=0, row=0)
+btn = Button(window, text="Сгенерировать", command=clicked)
+btn.grid(column=1, row=0)
+
+# Загружаю изображение
+image = Image.open("image1.png")
+
+image.thumbnail((300, 200))  # размер изображения
+
+photo = ImageTk.PhotoImage(image)
+
+image_label = Label(window, image=photo)
+image_label.grid(column=0, row=1, columnspan=2)  # Размещаем изображение под меткой "Сгенерируйте код"
+
+# Метка для кода
+lbl = Label(window, text="Сгенерируйте код:", font=("Arial Bold", 10))
+lbl.grid(column=0, row=0)
+
+# Кнопка "Сгенерировать"
+btn = Button(window, text="Сгенерировать", command=clicked)
+btn.grid(column=1, row=0)
+
+# Кнопка "Воспроизвести музыку"
+music_btn = Button(window, text="Воспроизвести музыку", command=play_music)
+music_btn.grid(column=1, row=3)  # Размещаем кнопку под изображением
+
+#window.photo = photo #сохранение фото
+
+window.mainloop()
